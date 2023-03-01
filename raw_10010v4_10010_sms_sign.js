@@ -1,5 +1,5 @@
-// cron "11 11 11 11 *" script-path=10010v4.js,tag=ÁªÍ¨ÓàÁ¿v4-¶ÌĞÅÑéÖ¤ÂëµÇÂ¼-ÊÖ¶¯Ö´ĞĞ-Çë×Ô¼ºÔÚÇàÁúÉÏ½ûÓÃ
-// const $ = new Env('ÁªÍ¨ÓàÁ¿v4-¶ÌĞÅÑéÖ¤ÂëµÇÂ¼-ÊÖ¶¯Ö´ĞĞ-Çë×Ô¼ºÔÚÇàÁúÉÏ½ûÓÃ')
+// cron "11 11 11 11 *" script-path=10010v4.js,tag=è”é€šä½™é‡v4-çŸ­ä¿¡éªŒè¯ç ç™»å½•-æ‰‹åŠ¨æ‰§è¡Œ-è¯·è‡ªå·±åœ¨é’é¾™ä¸Šç¦ç”¨
+// const $ = new Env('è”é€šä½™é‡v4-çŸ­ä¿¡éªŒè¯ç ç™»å½•-æ‰‹åŠ¨æ‰§è¡Œ-è¯·è‡ªå·±åœ¨é’é¾™ä¸Šç¦ç”¨')
 
 //#region JSEncrypt
 // prettier-ignore
@@ -8,16 +8,16 @@ var navigator=navigator||{};var window=window||{};ASN1={};Hex={};Base64S={};var 
 
 let NAMESPACE = `xream`
 if (typeof __filename !== 'undefined') {
-  // console.log('³¢ÊÔ½âÎöÎÄ¼şÃû³Æ')
+  // console.log('å°è¯•è§£ææ–‡ä»¶åç§°')
   let matchedFilename = String(__filename).match(/\/_(.*)_10010/)
   // console.log(matchedFilename)
   if (matchedFilename&&matchedFilename[1]) {
     NAMESPACE = matchedFilename[1]
-    console.log(`³¢ÊÔ´ÓÎÄ¼şÃû³ÆÖĞ¶ÁÈ¡ NAMESPACE: ${NAMESPACE}`)
+    console.log(`å°è¯•ä»æ–‡ä»¶åç§°ä¸­è¯»å– NAMESPACE: ${NAMESPACE}`)
   }
 }
 console.log(`NAMESPACE: ${NAMESPACE}`)
-let TITLE = `ÁªÍ¨ÓàÁ¿${NAMESPACE==='xream'?'':`(${NAMESPACE})`}`
+let TITLE = `è”é€šä½™é‡${NAMESPACE==='xream'?'':`(${NAMESPACE})`}`
 
 const NAME = `10010v4`
 
@@ -57,21 +57,21 @@ if($.isNode()) {
 
 !(async () => {
   if (typeof $request !== 'undefined') {
-    $.log('?? ÊÇ request')
+    $.log('?? æ˜¯ request')
 
   } else {
-    $.log('?? ²»ÊÇ request')
+    $.log('?? ä¸æ˜¯ request')
 
     
 
     let mobile = $.getdata(KEY_MOBILE)
     let code = $.getdata(KEY_CODE)
 
-    $.log(`ÊÖ»úºÅ: ${mobile}`)
-    $.log(`ÑéÖ¤Âë: ${code}`)
+    $.log(`æ‰‹æœºå·: ${mobile}`)
+    $.log(`éªŒè¯ç : ${code}`)
 
     if (!mobile||!code) {
-      throw new Error('?? ÇëÅäÖÃ ÊÖ»úºÅ(mobile) ÑéÖ¤Âë(code) ¼ÇµÃ±£´æ')
+      throw new Error('?? è¯·é…ç½® æ‰‹æœºå·(mobile) éªŒè¯ç (code) è®°å¾—ä¿å­˜')
     }
     await sign({ mobile, code })
   }
@@ -83,7 +83,7 @@ if($.isNode()) {
   .finally(() => $.done())
 
 async function sign({  mobile, code  }) {
-  $.log('?? ¿ªÊ¼')
+  $.log('?? å¼€å§‹')
   const res = await $.http.post({
     url: 'https://m.client.10010.com/mobileService/radomLogin.htm',
     body: transParams({ mobile: RSAEncrypt(mobile),password: RSAEncrypt(code), appId: random(160), 'version': 'iphone_c@9.0100'}),
@@ -93,22 +93,22 @@ async function sign({  mobile, code  }) {
   })
   // console.log(res)
   const status = $.lodash_get(res, 'status')
-  $.log('¡ı res status')
+  $.log('â†“ res status')
   $.log(status)
   let body = String($.lodash_get(res, 'body') || $.lodash_get(res, 'rawBody'))
   try {
     body = JSON.parse(body)
   } catch (e) {}
-  $.log('¡ı res body')
+  $.log('â†“ res body')
   $.log($.toStr(body))
   
   const dsc = $.lodash_get(body, 'dsc')
   if ($.lodash_get(body, 'code') !== '0') {
-    throw new Error(dsc || 'Î´Öª´íÎó')
+    throw new Error(dsc || 'æœªçŸ¥é”™è¯¯')
   }
   const appId = $.lodash_get(body, 'appId')
   if (!appId) {
-    throw new Error(`µÇÂ¼ appId Îª¿Õ`)
+    throw new Error(`ç™»å½• appId ä¸ºç©º`)
   }
   const tokenOnline = $.lodash_get(body, 'token_online')
   console.log(`token_online`)
@@ -119,15 +119,15 @@ async function sign({  mobile, code  }) {
   if (Array.isArray(cookie)) {
     cookie = cookie.join('; ')
   }
-  console.log(`?? µÇÂ¼ Cookie`)
+  console.log(`?? ç™»å½• Cookie`)
   console.log(cookie)
   if (!cookie) {
-    throw new Error(`µÇÂ¼ Cookie Îª¿Õ`)
+    throw new Error(`ç™»å½• Cookie ä¸ºç©º`)
   }
   $.setdata(cookie, KEY_COOKIE)
   $.setdata(appId, KEY_APPID)
   $.setdata('', KEY_CODE)
-  $.msg(TITLE, `µÇÂ¼³É¹¦`, `ÇëË¢ĞÂºó ÉèÖÃÃÜÂë ²¢±£´æ`)
+  $.msg(TITLE, `ç™»å½•æˆåŠŸ`, `è¯·åˆ·æ–°å è®¾ç½®å¯†ç  å¹¶ä¿å­˜`)
 
 }
 function random(length) {
